@@ -1,0 +1,73 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import com.github.jengelman.gradle.plugins.shadow.transformers.Transformer
+import com.github.jengelman.gradle.plugins.shadow.transformers.TransformerContext
+import org.apache.tools.zip.ZipEntry
+import org.apache.tools.zip.ZipOutputStream
+import org.gradle.api.file.FileTreeElement
+import org.gradle.api.tasks.Internal
+
+buildscript {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.johnrengelman:shadow:8.1.1'
+    }
+}
+
+class NettyEpollTransformer implements Transformer {
+    private java.nio.file.Path extractedNettyNative
+
+    boolean canTransformResource(FileTreeElement element) {
+        return element.name.endsWith("libnetty_transport_native_epoll_x86_64.so")
+    }
+
+    void transform(TransformerContext context) {
+        this.extractedNettyNative = Files.createTempFile("oyvotifer_build", ".so")
+        Files.copy(context.is, this.extractedNettyNative, StandardCopyOption.REPLACE_EXISTING)
+    }
+
+    @Internal
+    String getName() { return "OyvotiferNettyEpollTransformer" }
+
+    boolean hasTransformedResource() { this.extractedNettyNative != null }
+
+    void modifyOutputStream(ZipOutputStream jos, boolean preserveFileTimestamps) {
+        ZipEntry entry = new ZipEntry("META-INF/native/libcom_vexsoftware_votifier_netty_transport_native_epoll_x86_64.so")
+        entry.time = TransformerContext.getEntryTimestamp(preserveFileTimestamps, entry.time)
+        jos.putNextEntry(entry)
+        Files.copy(this.extractedNettyNative, jos)
+        Files.delete(this.extractedNettyNative)
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+dependencies {
+    implementation project(":oyvotifer-api")
+    implementation project(":oyvotifer-common")
+    implementation project(":oyvotifer-bukkit")
+    implementation project(":oyvotifer-bungeecord")
+    implementation project(":oyvotifer-velocity")
+}
+
+shadowJar {
+    archiveBaseName = 'oyvotifer'
+    relocate "io.netty", "com.vexsoftware.votifier.io.netty"
+    relocate "org.json", "com.vexsoftware.votifier.json"
+    relocate "com.google.code", "com.vexsoftware.votifier.google.code"
+    relocate "com.moandjiezana.toml", "com.vexsoftware.votifier.toml"
+    relocate "com.google.gson", "com.vexsoftware.votifier.google.gson"
+    relocate "org.apache.commons.io", "com.vexsoftware.votifier.commons.io"
+
+    transform(NettyEpollTransformer.class)
+}
+
+// Only the fat jar is a deliverable: build/libs/oyvotifer-1.0.0.jar
+jar.enabled = false
+shadowJar {
+    archiveClassifier = ''
+}
+build.dependsOn shadowJar

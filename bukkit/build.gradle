@@ -1,0 +1,6 @@
+dependencies {
+    // Compiled against the Spigot API; runs unchanged on Bukkit, Spigot and Paper (1.21.x and 26.x)
+    compileOnly group: "org.spigotmc", name: "spigot-api", version: "1.21.4-R0.1-SNAPSHOT"
+    implementation project(":oyvotifer-api")
+    implementation project(":oyvotifer-common")
+}

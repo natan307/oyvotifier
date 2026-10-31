@@ -1,0 +1,17 @@
+rootProject.name = 'oyvotifer'
+
+include 'api'
+findProject(':api')?.name = 'oyvotifer-api'
+
+include 'common'
+findProject(':common')?.name = 'oyvotifer-common'
+
+include 'bukkit'
+findProject(':bukkit')?.name = 'oyvotifer-bukkit'
+include 'bungeecord'
+findProject(':bungeecord')?.name = 'oyvotifer-bungeecord'
+
+include 'universal'
+findProject(':universal')?.name = 'oyvotifer-universal'
+include 'velocity'
+findProject(':velocity')?.name = 'oyvotifer-velocity'

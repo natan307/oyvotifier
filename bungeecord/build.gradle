@@ -1,0 +1,5 @@
+dependencies {
+    compileOnly group: "net.md-5", name: "bungeecord-api", version: "1.21-R0.5-SNAPSHOT"
+    implementation project(":oyvotifier-api")
+    implementation project(":oyvotifier-common")
+}

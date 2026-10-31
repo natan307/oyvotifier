@@ -1,0 +1,18 @@
+package com.vexsoftware.votifier.bungee;
+
+import net.md_5.bungee.api.event.ProxyReloadEvent;
+import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.event.EventHandler;
+
+public class ReloadListener implements Listener {
+    private final Oyvotifier oyvotifier;
+
+    public ReloadListener(Oyvotifier oyvotifier) {
+        this.oyvotifier = oyvotifier;
+    }
+
+    @EventHandler
+    public void onProxyReload(ProxyReloadEvent event) {
+        this.oyvotifier.reload();
+    }
+}

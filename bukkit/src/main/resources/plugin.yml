@@ -1,0 +1,28 @@
+name: oyvotifier
+main: com.vexsoftware.votifier.OyvotifierBukkit
+version: @app.version@
+description: A plugin that gets notified when votes are made for the server on toplists.
+authors: [Ichbinjoe, blakeman8192, Kramer, tuxed]
+api-version: '1.21'
+# Lets plugins that depend on Votifier/NuVotifier keep working with oyvotifier.
+provides: [Votifier, NuVotifier]
+
+commands:
+  nvreload:
+    description: Reloads the oyvotifier configuration
+    permission: oyvotifier.reload
+    permission-message: "You do not have permission to run this command."
+    usage: "/nvreload"
+  testvote:
+    description: Sends a test vote to the server
+    permission: oyvotifier.testvote
+    permission-message: "You do not have permission to run this command."
+    usage: "/testvote [username] [serviceName=?] [username=?] [address=?] [localTimestamp=?] [timestamp=?]"
+
+permissions:
+  oyvotifier.reload:
+    description: Allows you to reload the oyvotifier plugin
+    default: op
+  oyvotifier.testvote:
+    description: Allows you to send a test vote
+    default: op

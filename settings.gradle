@@ -1,0 +1,17 @@
+rootProject.name = 'oyvotifier'
+
+include 'api'
+findProject(':api')?.name = 'oyvotifier-api'
+
+include 'common'
+findProject(':common')?.name = 'oyvotifier-common'
+
+include 'bukkit'
+findProject(':bukkit')?.name = 'oyvotifier-bukkit'
+include 'bungeecord'
+findProject(':bungeecord')?.name = 'oyvotifier-bungeecord'
+
+include 'universal'
+findProject(':universal')?.name = 'oyvotifier-universal'
+include 'velocity'
+findProject(':velocity')?.name = 'oyvotifier-velocity'
